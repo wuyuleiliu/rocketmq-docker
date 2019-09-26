@@ -44,6 +44,9 @@ ENV ROCKETMQ_VERSION ${version}
 # Rocketmq home
 ENV ROCKETMQ_HOME  /home/rocketmq/rocketmq-${ROCKETMQ_VERSION}
 
+# JAVA_OPT by self
+ENV JAVA_OPT_SELF ""
+
 WORKDIR  ${ROCKETMQ_HOME}
 
 RUN set -eux; \

@@ -27,6 +27,16 @@ checkVersion()
     exit -1
 }
 
+checkRepositoryName()
+{
+    if [ -n "$1" ]; then
+        return 1
+    fi
+
+	echo "repositoryName $1 illegal, it should not be null"
+    exit -1
+}
+
 if [ $# -lt 2 ]; then
     echo -e "Usage: sh $0 Version BaseImage"
     exit -1
@@ -34,16 +44,20 @@ fi
 
 ROCKETMQ_VERSION=$1
 BASE_IMAGE=$2
+# name by self
+REPOSITORY_NAME=$3
 
 checkVersion $ROCKETMQ_VERSION
+
+checkRepositoryName $REPOSITORY_NAME
 
 # Build rocketmq
 case "${BASE_IMAGE}" in
     alpine)
-        docker build --no-cache -f Dockerfile-alpine -t rocketmqinc/rocketmq:${ROCKETMQ_VERSION}-alpine --build-arg version=${ROCKETMQ_VERSION} .
+        docker build --no-cache -f Dockerfile-alpine -t ${REPOSITORY_NAME}/rocketmq:${ROCKETMQ_VERSION}-alpine --build-arg version=${ROCKETMQ_VERSION} .
     ;;
     centos)
-        docker build --no-cache -f Dockerfile-centos -t rocketmqinc/rocketmq:${ROCKETMQ_VERSION} --build-arg version=${ROCKETMQ_VERSION} .
+        docker build --no-cache -f Dockerfile-centos -t ${REPOSITORY_NAME}/rocketmq:${ROCKETMQ_VERSION} --build-arg version=${ROCKETMQ_VERSION} .
     ;;
     *)
         echo "${BASE_IMAGE} is not supported, supported base images: centos, alpine"
